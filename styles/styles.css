@@ -14,16 +14,16 @@
 
 .cube {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   transform-style: preserve-3d;
-  animation: rotateCube 18s infinite linear;
+  animation: rotateCube 20s infinite linear;
 }
 
 .face {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   display: flex;
   justify-content: center;
@@ -40,43 +40,49 @@
 
 .front {
   /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  background: linear-gradient(135deg, #4265bc 0%, #4265bc 100%);
   color: white;
-  transform: rotateY(0deg) translateZ(50px);
+  transform: rotateY(0deg) translateZ(100px);
   border: 1px solid #fff;
 }
 
 .back {
   /* background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); */
+  background: linear-gradient(135deg, #4265bc 0%, #4265bc 100%);
   color: white;
-  transform: rotateY(180deg) translateZ(50px);
+  transform: rotateY(180deg) translateZ(100px);
   border: 1px solid #fff;
 }
 
 .right {
   /* background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); */
+  background: linear-gradient(135deg, #4265bc 0%, #4265bc 100%);
   color: white;
-  transform: rotateY(90deg) translateZ(50px);
+  transform: rotateY(90deg) translateZ(100px);
   border: 1px solid #fff;
 }
 
 .left {
   /* background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); */
+  background: linear-gradient(135deg, #4265bc 0%, #4265bc 100%);
   color: white;
-  transform: rotateY(-90deg) translateZ(50px);
+  transform: rotateY(-90deg) translateZ(100px);
   border: 1px solid #fff;
 }
 
 .top {
   /* background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); */
+  background: linear-gradient(135deg, #4265bc 0%, #4265bc 100%);
   color: white;
-  transform: rotateX(90deg) translateZ(50px);
+  transform: rotateX(90deg) translateZ(100px);
   border: 1px solid #fff;
 }
 
 .bottom {
   /* background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); */
+  background: linear-gradient(135deg, #4265bc 0%, #4265bc 100%);
   color: white;
-  transform: rotateX(-90deg) translateZ(50px);
+  transform: rotateX(-90deg) translateZ(100px);
   border: 1px solid #fff;
 }
 
@@ -99,9 +105,9 @@
 }
 
 /* Add some hover effects for interactivity */
-/* .cube-container:hover .cube {
+.cube-container:hover .cube {
   animation-play-state: paused;
-} */
+}
 
 /* Add a subtle glow effect */
 /* .cube::before {

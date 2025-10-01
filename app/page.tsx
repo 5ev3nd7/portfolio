@@ -12,7 +12,7 @@ export default function Home() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const [showHeader, setShowHeader] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const [introOpacity, setIntroOpacity] = useState(1)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
 
   const fadeInAnimation = {
@@ -60,7 +60,7 @@ export default function Home() {
           }
         })
       },
-      { threshold: 0.1, rootMargin: "0px 0px 0px 0px" },
+      { threshold: 0.3, rootMargin: "0px 0px 0px 0px" },
     )
 
     sectionsRef.current.forEach((section) => {
@@ -81,23 +81,14 @@ export default function Home() {
     const handleScroll = () => {
       const scrollTop = window.scrollY
       const progress = Math.min(scrollTop / window.innerHeight, 1)
-      setScrollProgress(progress)
+      const newOpacity = 1 - progress
+      setIntroOpacity(newOpacity)
     }
 
+    handleScroll()
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const getBackgroundColor = () => {
-    const lightGrey = { r: 245, g: 245, b: 245 }
-    const black = { r: 0, g: 0, b: 0 }
-
-    const r = Math.round(lightGrey.r * (1 - scrollProgress) + black.r * scrollProgress)
-    const g = Math.round(lightGrey.g * (1 - scrollProgress) + black.g * scrollProgress)
-    const b = Math.round(lightGrey.b * (1 - scrollProgress) + black.b * scrollProgress)
-
-    return `rgb(${r}, ${g}, ${b})`
-  }
 
   return (
     //  style={{ backgroundColor: getBackgroundColor() }}
@@ -147,12 +138,15 @@ export default function Home() {
       </nav>
 
       <main className="max-w-4xl mx-auto px-8 sm:px-16 lg:px-40 xl:px-6">
-        <header
+        <section
           id="Intro"
           ref={(el) => {sectionsRef.current[0] = el}}
-          className="min-h-screen flex items-center opacity-0"
+          className="min-h-screen flex items-center pointer-events-none mb-72"
         >
-          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
+          <div 
+            className="fixed grid lg:grid-cols-5 gap-12 sm:gap-16 w-full"
+            style={{ opacity: introOpacity }}
+          >
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">            
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                 Jeff
@@ -177,18 +171,18 @@ export default function Home() {
             </div>
 
             <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
-              <Cube3D />
+              
             </div>
           </div>
-        </header>
+        </section>
 
         <motion.section
-          className="min-h-screen py-20 sm:py-32 opacity-0"
           variants={fadeInAnimation}
-          initial="initial"
+          initial="hidden"
           whileInView="whileInView"
           id="Experience"
           ref={(el) => {sectionsRef.current[1] = el}}
+          className="min-h-screen py-20 sm:py-32 opacity-0"
         >
           <div className="space-y-12 lg:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -295,13 +289,20 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <section
+        <motion.section
+          variants={fadeInAnimation}
+          initial="hidden"
+          whileInView="whileInView"
           id="Projects"
           ref={(el) => {sectionsRef.current[2] = el}}
           className="min-h-screen py-20 sm:py-32 opacity-0"
         >
           <div className="space-y-12 sm:space-y-16">
             <h2 className="text-3xl sm:text-4xl font-light">Projects</h2>
+
+            <div>
+              <Cube3D />
+            </div>
 
             <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
               {[
@@ -367,9 +368,16 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section id="Connect" ref={(el) => {sectionsRef.current[3] = el}} className="py-20 sm:py-32 opacity-0">
+        <motion.section
+          variants={fadeInAnimation}
+          initial="hidden"
+          whileInView="whileInView"
+          id="Connect" 
+          ref={(el) => {sectionsRef.current[3] = el}} 
+          className="py-20 sm:py-32 opacity-0"
+        >
           <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
             <div className="space-y-6 sm:space-y-8">
               <h2 className="text-3xl sm:text-4xl font-light">Connect</h2>
@@ -422,7 +430,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <footer className="py-12 sm:py-16 border-t border-border">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
