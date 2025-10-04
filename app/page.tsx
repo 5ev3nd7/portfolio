@@ -7,11 +7,17 @@ import { RainbowCard } from "@/components/RainbowCard"
 import { useEffect, useRef, useState } from "react"
 import { BiSolidFilePdf } from "react-icons/bi"
 import { FiFigma } from "react-icons/fi"
+import { BsGithub, BsLinkedin } from "react-icons/bs";
+import { MdEmail } from "react-icons/md";
+import Image from "next/image";
+import { MobileMenu } from "@/components/MobileMenu";
+import ExpandableCard from "@/components/ExpandableCard";
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const [showHeader, setShowHeader] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
   const [introOpacity, setIntroOpacity] = useState(1)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
 
@@ -56,6 +62,7 @@ export default function Home() {
             setActiveSection(entry.target.id)
             if (!mediaQuery.matches) {
               setShowHeader(entry.target.id !== "Intro")
+              setShowMenu(entry.target.id !== "Intro")
             }
           }
         })
@@ -77,6 +84,7 @@ export default function Home() {
     document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
   }
 
+  // fade in/out intro
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY
@@ -84,14 +92,12 @@ export default function Home() {
       const newOpacity = 1 - progress
       setIntroOpacity(newOpacity)
     }
-
     handleScroll()
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
-    //  style={{ backgroundColor: getBackgroundColor() }}
     <div className="min-h-screen bg-background text-foreground relative">
       <header
         className={`fixed top-0 left-0 right-0 z-50 bg-foreground/2 shadow-2xl backdrop-blur-2xl border-b border-border transition-all duration-500 ${
@@ -99,41 +105,84 @@ export default function Home() {
         }`}
       >
         <div className="max-w-4xl mx-auto px-8 sm:px-16 lg:px-40 xl:px-6 py-4 flex items-center justify-between">
-          <div className="text-xl font-light tracking-tight">Jeff Harris</div>
+          <div className="text-xl font-light tracking-tight"><a href="#">Jeff Harris</a></div>
 
-          <nav className="flex lg:hidden">
-            <div className="flex items-center gap-6">
-              {["Intro", "Experience", "Projects", "Connect"].map((section) => (
-                <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className={`px-2 py-1 rounded transition-all duration-500 ${
-                    activeSection === section ? "bg-foreground text-background" : "hover:text-background hover:bg-foreground"
-                  }`}
-                  aria-label={`Navigate to ${section}`}
-                >
-                  {section}
-                </button>
-              ))}
+          <nav className="flex">
+            <div className="items-center gap-6 hidden md:flex lg:hidden">
+              {["Intro", "About", "Experience", "Projects", "Connect"].map((section) => {
+                if (section === "Intro") return null
+                const isActive = activeSection === section
+                return (
+                  <button
+                    key={section}
+                    onClick={() => scrollToSection(section)}
+                    className={`px-2 py-1 rounded transition-all duration-500 ${
+                      isActive ? "bg-foreground text-background" : "hover:text-background hover:bg-foreground"
+                    }`}
+                    aria-label={`Navigate to ${section}`}
+                  >
+                    {section}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="flex justify-end">
+              <div className="flex md:hidden">
+                <MobileMenu activeSection={activeSection} onNavigate={scrollToSection} />
+              </div>
+              <button
+                onClick={toggleTheme}
+                className="group p-3 ml-8 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
+                aria-label="Toggle theme"
+              >
+                {isDark ? (
+                  <svg
+                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                  </svg>
+                )}
+              </button>
             </div>
           </nav>
         </div>
       </header>
 
-      <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
+      <nav
+        className={`fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block transition-all duration-500 ${
+          showMenu ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
+        }`}
+      >
         <div className="flex flex-col gap-4">
-          {["Intro", "Experience", "Projects", "Connect"].map((section) => (
-            <button
-              key={section}
-              onClick={() => scrollToSection(section)}
-              className={`w-2 h-8 rounded transition-all duration-500 ${
-                activeSection === section ? "w-30 -pl-6 bg-foreground text-background" : "bg-muted-foreground/30 text-muted-foreground hover:bg-foreground"
-              }`}
-              aria-label={`Navigate to ${section}`}
-            >
-              <span className="pl-6 text-sm">{section}</span>
-            </button>
-          ))}
+          {["Intro", "About", "Experience", "Projects", "Connect"].map((section) => {
+            if (section === "Intro") return null
+            const isActive = activeSection === section
+            return (
+              <button
+                key={section}
+                onClick={() => scrollToSection(section)}
+                className={`w-2 h-8 rounded transition-all duration-500 ${
+                  isActive ? "w-30 -pl-6 bg-foreground text-background" : "bg-muted-foreground/30 text-muted-foreground hover:bg-foreground"
+                }`}
+                aria-label={`Navigate to ${section}`}
+              >
+                <span className="pl-6 text-sm">{section}</span>
+              </button>
+            )
+          })}
         </div>
       </nav>
 
@@ -144,10 +193,10 @@ export default function Home() {
           className="min-h-screen flex items-center pointer-events-none mb-72"
         >
           <div 
-            className="fixed grid lg:grid-cols-5 gap-12 sm:gap-16 w-full"
+            className="fixed flex flex-col lg:flex-row gap-12 sm:gap-16 items-center max-w-4xl mx-auto"
             style={{ opacity: introOpacity }}
           >
-            <div className="lg:col-span-3 space-y-6 sm:space-y-8">            
+            <div className="space-y-6 sm:space-y-8">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                 Jeff
                 <br />
@@ -170,8 +219,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
-              
+            <div className="hidden lg:flex justify-center space-y-6 sm:space-y-8 mt-8 lg:mt-0">
+              <Image src="/images/calvin.png" alt="Calvin and Hobbes" width={0} height={0} style={{ width: '75%', height: 'auto' }} priority />
             </div>
           </div>
         </section>
@@ -180,8 +229,23 @@ export default function Home() {
           variants={fadeInAnimation}
           initial="hidden"
           whileInView="whileInView"
-          id="Experience"
+          id="About"
           ref={(el) => {sectionsRef.current[1] = el}}
+          className="min-h-screen py-20 sm:py-32 opacity-0"
+        >
+          <div className="space-y-12 lg:space-y-16">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <h2 className="text-3xl sm:text-4xl font-light">About</h2>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          variants={fadeInAnimation}
+          initial="hidden"
+          whileInView="whileInView"
+          id="Experience"
+          ref={(el) => {sectionsRef.current[2] = el}}
           className="min-h-screen py-20 sm:py-32 opacity-0"
         >
           <div className="space-y-12 lg:space-y-16">
@@ -232,7 +296,7 @@ export default function Home() {
                 <li key={index}>
                   <a href={job.url} className="group/link" target="_blank" rel="noopener noreferrer">
                     <div className="group relative grid lg:grid-cols-12 gap-4 text-muted-foreground transition duration-500 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
-                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                      <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-100/50 dark:lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
 
                       <div className="lg:col-span-2">
                         <div className="text-xs font-light pt-1 relative group-hover:text-muted-foreground transition-colors duration-500">
@@ -294,14 +358,18 @@ export default function Home() {
           initial="hidden"
           whileInView="whileInView"
           id="Projects"
-          ref={(el) => {sectionsRef.current[2] = el}}
+          ref={(el) => {sectionsRef.current[3] = el}}
           className="min-h-screen py-20 sm:py-32 opacity-0"
         >
           <div className="space-y-12 sm:space-y-16">
             <h2 className="text-3xl sm:text-4xl font-light">Projects</h2>
 
-            <div>
+            {/* <div>
               <Cube3D />
+            </div> */}
+
+            <div>
+              <ExpandableCard />
             </div>
 
             <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
@@ -375,58 +443,47 @@ export default function Home() {
           initial="hidden"
           whileInView="whileInView"
           id="Connect" 
-          ref={(el) => {sectionsRef.current[3] = el}} 
+          ref={(el) => {sectionsRef.current[4] = el}} 
           className="py-20 sm:py-32 opacity-0"
         >
+          <div className="mb-8 sm:mb-10">
+            <h2 className="text-3xl sm:text-4xl font-light">Connect</h2>
+          </div>
+          
           <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
             <div className="space-y-6 sm:space-y-8">
-              <h2 className="text-3xl sm:text-4xl font-light">Connect</h2>
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                I'm always interested in new opportunities, collaborations, and conversations about technology and design.
+              </p>
+            </div>
 
-              <div className="space-y-6">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                  Always interested in new opportunities, collaborations, and conversations about technology and design.
-                </p>
-
+            <div className="space-y-6 sm:space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <Link
                     href="mailto:test@example.com"
                     className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
                   >
+                    <MdEmail />
                     <span className="text-base sm:text-lg">test@example.com</span>
-                    <svg
-                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                  </Link>
+
+                  <Link
+                    href="https://github.com/5ev3nd7"
+                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                  >
+                    <BsGithub />
+                    <span className="text-base sm:text-lg">@5ev3nd7</span>
+                  </Link>
+
+                  <Link
+                    href="https://www.linkedin.com/in/jeffreywharris"
+                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                  >
+                    <BsLinkedin />
+                    <span className="text-base sm:text-lg">in/jeffreywharris</span>
                   </Link>
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-6 sm:space-y-8">
-              <div className="text-sm text-muted-foreground font-mono">SOCIAL</div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { name: "GitHub", handle: "@5ev3nd7", url: "https://github.com/5ev3nd7" },
-                  { name: "LinkedIn", handle: "jeffreywharris", url: "https://www.linkedin.com/in/jeffreywharris/" },
-                ].map((social) => (
-                  <Link
-                    key={social.name}
-                    href={social.url}
-                    className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
-                  >
-                    <div className="space-y-2">
-                      <div className="text-foreground group-hover:text-muted-foreground transition-colors duration-300">
-                        {social.name}
-                      </div>
-                      <div className="text-sm text-muted-foreground">{social.handle}</div>
-                    </div>
-                  </Link>
-                ))}
               </div>
             </div>
           </div>
@@ -463,22 +520,6 @@ export default function Home() {
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                   </svg>
                 )}
-              </button>
-
-              <button className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300">
-                <svg
-                  className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
               </button>
             </div>
           </div>
