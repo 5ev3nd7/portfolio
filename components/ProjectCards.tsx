@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 
-export default function ExpandableCard() {
+export default function ProjectCards() {
   const [active, setActive] = useState<(typeof cards)[number] | boolean | null>(null)
   const ref = useRef<HTMLDivElement>(null)
   const id = useId()
@@ -59,7 +59,7 @@ export default function ExpandableCard() {
                   duration: 0.05,
                 },
               }}
-              className="flex absolute top-25 right-10 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
+              className="flex absolute top-10 right-10 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
               onClick={() => setActive(null)}
             >
               <CloseIcon />
@@ -75,16 +75,16 @@ export default function ExpandableCard() {
                   height={200}
                   src={active.src || "/placeholder.svg"}
                   alt={active.title}
-                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-contain object-center bg-white p-6"
                 />
               </motion.div>
 
               <div>
-                <div className="flex justify-between items-start p-4">
-                  <div className="">
+                <div className="flex justify-between items-start p-4 pt-6">
+                  <div className="w-full">
                     <motion.h3
                       layoutId={`title-${active.title}-${id}`}
-                      className="font-bold text-neutral-700 dark:text-neutral-200"
+                      className="font-bold text-2xl text-neutral-700 dark:text-neutral-200"
                     >
                       {active.title}
                     </motion.h3>
@@ -100,7 +100,7 @@ export default function ExpandableCard() {
                     layoutId={`button-${active.title}-${id}`}
                     href={active.ctaLink}
                     target="_blank"
-                    className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
+                    className="px-4 py-3 rounded-sm font-bold bg-white hover:bg-teal-500 text-background hover:text-white"
                     rel="noreferrer"
                   >
                     {active.ctaText}
@@ -112,9 +112,20 @@ export default function ExpandableCard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
+                    className="text-neutral-600 text-sm lg:text-base h-40 md:h-fit pb-6 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
+                    // [mask:linear-gradient(to_bottom,white,white,transparent)]
                   >
                     {typeof active.content === "function" ? active.content() : active.content}
+
+                    <ul className="flex flex-wrap gap-3 mt-2 group-hover:text-teal-300 transition-colors duration-500">
+                      {active.tech && (
+                        (active.tech).map((tech, index) => (
+                          <li key={index} className="px-3 py-1.5 text-sm flex items-center rounded-md text-white/90 bg-white/20 font-semibold">
+                            {tech}
+                          </li>
+                        ))
+                      )}
+                    </ul>
                   </motion.div>
                 </div>
               </div>
@@ -122,44 +133,44 @@ export default function ExpandableCard() {
           </div>
         ) : null}
       </AnimatePresence>
-      <div className="max-w-5xl mx-auto w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="max-w-5xl mx-auto w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
         {cards.map((card, index) => (
           <motion.div
             key={`card-${card.title}-${id}`}
             layoutId={`card-${card.title}-${id}`}
             onClick={() => setActive(card)}
-            className="relative rounded-xl border p-2 cursor-pointer"
+            className="relative rounded-xl cursor-pointer"
           >
             {active !== card && (
               <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} />
             )}
-            <div className="relative p-6 flex flex-col items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg bg-white dark:bg-neutral-900 shadow-sm hover:shadow-md transition-shadow">
+            <div className="relative p-6 flex flex-col items-start bg-white/5 rounded-xl transition-all duration-500 lg:hover:bg-white/10 lg:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:drop-shadow-lg">
               <motion.div layoutId={`image-${card.title}-${id}`} className="w-full mb-4">
                 <img
                   width={100}
                   height={100}
                   src={card.src || "/placeholder.svg"}
                   alt={card.title}
-                  className="w-full h-48 rounded-lg object-cover object-top"
+                  className="w-full h-48 rounded-lg object-contain object-center bg-white p-4"
                 />
               </motion.div>
               <div className="w-full mb-4">
                 <motion.h3
                   layoutId={`title-${card.title}-${id}`}
-                  className="font-medium text-neutral-800 dark:text-neutral-200 text-center mb-1"
+                  className="font-medium text-2xl text-neutral-800 dark:text-neutral-200 mb-1"
                 >
                   {card.title}
                 </motion.h3>
                 <motion.p
                   layoutId={`description-${card.description}-${id}`}
-                  className="text-neutral-600 dark:text-neutral-400 text-center text-sm"
+                  className="text-neutral-600 dark:text-neutral-400"
                 >
                   {card.description}
                 </motion.p>
               </div>
               <motion.button
                 layoutId={`button-${card.title}-${id}`}
-                className="px-4 py-2 text-sm rounded-full font-bold bg-gray-100 hover:bg-green-500 hover:text-white text-black w-full"
+                className="px-4 py-2 text-sm rounded-sm font-bold bg-gray-100 hover:bg-teal-500 hover:text-white text-black"
               >
                 {card.ctaText}
               </motion.button>
@@ -206,6 +217,21 @@ export const CloseIcon = () => {
 
 const cards = [
   {
+    title: "METRICS",
+    description: "Public website",
+    src: "/images/metrics.png",
+    ctaText: "View",
+    ctaLink: "https://metricscenter.org",
+    tech: ["Next.js", "Tailwind", "Vercel"],
+    content: () => {
+      return (
+        <p>
+          Desgin, develop, and implement public facing website<br /> <br /> 
+        </p>
+      )
+    },
+  },
+  {
     description: "Lana Del Rey",
     title: "Summertime Sadness",
     src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg",
@@ -224,26 +250,6 @@ const cards = [
       )
     },
   },
-  {
-    description: "Babbu Maan",
-    title: "Mitran Di Chhatri",
-    src: "https://assets.aceternity.com/demos/babbu-maan.jpeg",
-    ctaText: "Play",
-    ctaLink: "https://ui.aceternity.com/templates",
-    content: () => {
-      return (
-        <p>
-          Babu Maan, a legendary Punjabi singer, is renowned for his soulful voice and profound lyrics that resonate
-          deeply with his audience. Born in the village of Khant Maanpur in Punjab, India, he has become a cultural icon
-          in the Punjabi music industry. <br /> <br /> His songs often reflect the struggles and triumphs of everyday
-          life, capturing the essence of Punjabi culture and traditions. With a career spanning over two decades, Babu
-          Maan has released numerous hit albums and singles that have garnered him a massive fan following both in India
-          and abroad.
-        </p>
-      )
-    },
-  },
-
   {
     description: "Metallica",
     title: "For Whom The Bell Tolls",

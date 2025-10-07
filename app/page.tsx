@@ -3,15 +3,16 @@
 import Link from "next/link"
 import { motion } from 'motion/react';
 import Cube3D from "@/components/Cube3D"
-import { RainbowCard } from "@/components/RainbowCard"
 import { useEffect, useRef, useState } from "react"
 import { BiSolidFilePdf } from "react-icons/bi"
-import { FiFigma } from "react-icons/fi"
+import { FiFigma, FiLink } from "react-icons/fi"
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { MdEmail } from "react-icons/md";
 import Image from "next/image";
 import { MobileMenu } from "@/components/MobileMenu";
-import ExpandableCard from "@/components/ExpandableCard";
+import ProjectCards from "@/components/ProjectCards";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
+import { Code2Icon, WrenchIcon } from "lucide-react"
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
@@ -32,9 +33,9 @@ export default function Home() {
     document.documentElement.classList.toggle("dark", isDark)
   }, [isDark])
 
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
+  // const toggleTheme = () => {
+  //   setIsDark(!isDark)
+  // }
 
   useEffect(() => {
     // md
@@ -100,7 +101,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground relative">
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-foreground/2 shadow-2xl backdrop-blur-2xl border-b border-border transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-10 bg-background/90 shadow-2xl backdrop-blur-2xl border-b border-border transition-all duration-500 ${
           showHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
         }`}
       >
@@ -127,35 +128,8 @@ export default function Home() {
               })}
             </div>
 
-            <div className="flex justify-end">
-              <div className="flex md:hidden">
-                <MobileMenu activeSection={activeSection} onNavigate={scrollToSection} />
-              </div>
-              <button
-                onClick={toggleTheme}
-                className="group p-3 ml-8 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
-                )}
-              </button>
+            <div className="flex md:hidden">
+              <MobileMenu activeSection={activeSection} onNavigate={scrollToSection} />
             </div>
           </nav>
         </div>
@@ -175,11 +149,11 @@ export default function Home() {
                 key={section}
                 onClick={() => scrollToSection(section)}
                 className={`w-2 h-8 rounded transition-all duration-500 ${
-                  isActive ? "w-30 -pl-6 bg-foreground text-background" : "bg-muted-foreground/30 text-muted-foreground hover:bg-foreground"
+                  isActive ? "w-30 -pl-6 bg-foreground text-background" : "bg-muted-foreground/30 text-muted-foreground hover:bg-foreground hover:text-teal-300"
                 }`}
                 aria-label={`Navigate to ${section}`}
               >
-                <span className="pl-6 text-sm">{section}</span>
+                <span className="pl-6">{section}</span>
               </button>
             )
           })}
@@ -237,6 +211,68 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <h2 className="text-3xl sm:text-4xl font-light">About</h2>
             </div>
+            <p>
+              I'm a Front-End Web Developer and Designer with over 20+ years of experience creating responsive, user-friendly websites. With a strong foundation in UI/UX design, I bring a user-centered perspective to development, ensuring design and code work seamlessly to deliver innovative digital experiences.
+              <br /><br />
+              I've managed and collaborated with cross-functional teams to build web applications using JavaScript, TypeScript, and modern frameworks like Next.js, with a focus on usability and performance. Driven by curiosity and customer-focus, I'm always exploring new technologies and best practices to deliver solutions that improve engagement and outcomes.
+            </p>
+            <div className="grid gap-6 sm:gap-8 xl:grid-cols-2">
+              <div className="flex overflow-hidden z-1 rounded-lg animate-gradient__rotate relative group opacity-0 animate-fade-in">
+                <Card className="p-6 bg-white/10 border-none w-full">
+                  <CardHeader>
+                    <CardTitle>
+                      <h1 className="text-3xl flex items-center gap-3"><Code2Icon /> Solutions</h1>
+                    </CardTitle>
+                    <CardDescription>
+                      <p className="text-base">I design and develop clean, modern interfaces that enhance the user experience and help your business grow.</p>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="list-disc ml-4 flex flex-col gap-1 mb-2">
+                      <li>UI/UX design & workflows</li>
+                      <li>Full-stack web development</li>
+                      {/* <li>Responsive interface design</li> */}
+                      <li>Design systems and component libraries</li>
+                      <li>Wireframing and rapid prototyping</li>
+                      <li>CMS architecture and implementation</li>
+                      <li>Database design and API integration</li>
+                      <li>Continuous integration and delivery</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+                <i></i>
+              </div>
+
+              <div className="flex overflow-hidden z-1 rounded-lg animate-gradient__rotate relative group opacity-0 animate-fade-in">
+                <Card className="p-6 bg-white/10 border-none w-full">
+                  <CardHeader>
+                    <CardTitle>
+                      <h1 className="text-3xl flex items-center gap-3"><WrenchIcon /> Tools</h1>
+                    </CardTitle>
+                    <CardDescription>
+                      <p className="text-base">I use modern tools and frameworks to bridge design and development, delivering reliable, performant digital experiences.</p>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="list-disc ml-4 flex flex-col gap-1 mb-2">
+                      <li>
+                        <span className="font-bold">Frontend</span><br/>
+                        <span className="text-muted-foreground">Next.js, TypeScript, Tailwind, Payload</span>
+                      </li>
+                      <li>
+                        <span className="font-bold">Full-stack</span><br/>
+                        <span className="text-muted-foreground">Vercel, CI/CD, Supabase, GIT, PostHog</span>
+                      </li>
+                      <li>
+                        <span className="font-bold">Design</span><br/>
+                        <span className="text-muted-foreground">Figma, Adobe, Miro, Framer</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+                <i></i>
+              </div>
+            </div>
           </div>
         </motion.section>
 
@@ -261,7 +297,7 @@ export default function Home() {
                   description:
                     "Led full-stack development and infrastructure for 10+ projects, delivering public websites, private portals, and custom CMS platforms that improved usability and reduced manual processes. Built open-source resources, streamlined deployments, and established a collaborative, UX-first culture that accelerated onboarding and improved reliability.",
                   tech: ["Next.js", "Payload CMS", "Vercel", "Design Systems"],
-                  url: "https://metricscenter.org",
+                  // url: "https://metricscenter.org",
                 },
                 {
                   year: "2017 — 2023",
@@ -294,7 +330,7 @@ export default function Home() {
                 },
               ].map((job, index) => (
                 <li key={index}>
-                  <a href={job.url} className="group/link" target="_blank" rel="noopener noreferrer">
+                  <div className="group/link">
                     <div className="group relative grid lg:grid-cols-12 gap-4 text-muted-foreground transition duration-500 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
                       <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-100/50 dark:lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
 
@@ -307,9 +343,9 @@ export default function Home() {
                       <div className="lg:col-span-10">
                         <h3 className="flex items-center text-lg sm:text-xl font-medium relative group-hover:text-teal-300 transition-colors duration-500">
                           {job.role}
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ml-1 mb-1 inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:translate-x-1 motion-reduce:transition-none" aria-hidden="true">
+                          {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ml-1 mb-1 inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:translate-x-1 motion-reduce:transition-none" aria-hidden="true">
                             <path d="M4.5 12a.75.75 0 01.75-.75h9.69l-3.97-3.97a.75.75 0 111.06-1.06l5.25 5.25a.75.75 0 010 1.06l-5.25 5.25a.75.75 0 11-1.06-1.06l3.97-3.97H5.25A.75.75 0 014.5 12z" />
-                          </svg>
+                          </svg> */}
                         </h3>
                         <div className="text-muted-foreground relative group-hover:text-foreground transition-colors duration-500">{job.company}</div>
 
@@ -317,16 +353,32 @@ export default function Home() {
                           {job.description}
                         </p>
 
-                        {job.design &&
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.open(`${job.design}`, "_blank");
-                            }}
-                            className="relative flex items-center gap-2 mt-2 border border-muted-foreground/25 rounded py-1 px-2 hover:border-foreground hover:bg-foreground hover:text-background transition-colors duration-500"
-                          >
-                            <FiFigma /> Design file
-                          </button>
+                        {(job.url || job.design) &&
+                          <div className="flex gap-6 items-center pb-1">
+                            {job.design &&
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(`${job.design}`, "_blank");
+                                }}
+                                className="relative flex items-center gap-2 mt-2 border border-muted-foreground/25 rounded py-1 px-2 hover:border-foreground hover:bg-foreground hover:text-background transition-colors duration-500"
+                              >
+                                <FiFigma /> Design file
+                              </button>
+                            }
+
+                            {job.url &&
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(`${job.url}`, "_blank");
+                                }}
+                                className="relative flex items-center gap-2 mt-2 border border-muted-foreground/25 rounded py-1 px-2 hover:border-foreground hover:bg-foreground hover:text-background transition-colors duration-500"
+                              >
+                                <FiLink /> Website
+                              </button>
+                            }
+                          </div>
                         }
                       </div>
 
@@ -342,14 +394,11 @@ export default function Home() {
                       </ul>
                       */}
                     </div>
-                  </a>
+                  </div>
                 </li>
               ))}
             </ol>
-            <a href="#" className="flex items-center text-sm text-muted-foreground font-mono gap-2 hover:text-foreground"><BiSolidFilePdf className="text-foreground" size={28}/> View full resume</a>
-
-<RainbowCard />
-
+            <a href="#"><button className="relative flex items-center gap-2 mt-2 border border-muted-foreground/25 rounded py-2 px-2 hover:border-foreground hover:bg-foreground hover:text-background transition-colors duration-500"><BiSolidFilePdf size={28}/> View full resume</button></a>
           </div>
         </motion.section>
 
@@ -364,77 +413,10 @@ export default function Home() {
           <div className="space-y-12 sm:space-y-16">
             <h2 className="text-3xl sm:text-4xl font-light">Projects</h2>
 
-            {/* <div>
-              <Cube3D />
-            </div> */}
+            {/* <Cube3D /> */}
 
-            <div>
-              <ExpandableCard />
-            </div>
-
-            <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
-              {[
-                {
-                  title: "The Future of Web Development",
-                  excerpt: "Exploring how AI and automation are reshaping the way we build for the web.",
-                  date: "Dec 2024",
-                  readTime: "5 min",
-                },
-                {
-                  title: "Design Systems at Scale",
-                  excerpt: "Lessons learned from building and maintaining design systems across multiple products.",
-                  date: "Nov 2024",
-                  readTime: "8 min",
-                },
-                {
-                  title: "Performance-First Development",
-                  excerpt: "Why performance should be a first-class citizen in your development workflow.",
-                  date: "Oct 2024",
-                  readTime: "6 min",
-                },
-                {
-                  title: "The Art of Code Review",
-                  excerpt: "Building better software through thoughtful and constructive code reviews.",
-                  date: "Sep 2024",
-                  readTime: "4 min",
-                },
-              ].map((post, index) => (
-                <article
-                  key={index}
-                  className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
-                      <span>{post.date}</span>
-                      <span>{post.readTime}</span>
-                    </div>
-
-                    <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
-                      {post.title}
-                    </h3>
-
-                    <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
-
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                      <span>Read more</span>
-                      <svg
-                        className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <ProjectCards />
+            
           </div>
         </motion.section>
 
@@ -462,7 +444,7 @@ export default function Home() {
                 <div className="space-y-4">
                   <Link
                     href="mailto:test@example.com"
-                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                    className="group flex items-center gap-3 text-foreground hover:text-teal-300 transition-colors duration-300"
                   >
                     <MdEmail />
                     <span className="text-base sm:text-lg">test@example.com</span>
@@ -470,7 +452,7 @@ export default function Home() {
 
                   <Link
                     href="https://github.com/5ev3nd7"
-                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                    className="group flex items-center gap-3 text-foreground hover:text-teal-300 transition-colors duration-300"
                   >
                     <BsGithub />
                     <span className="text-base sm:text-lg">@5ev3nd7</span>
@@ -478,7 +460,7 @@ export default function Home() {
 
                   <Link
                     href="https://www.linkedin.com/in/jeffreywharris"
-                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                    className="group flex items-center gap-3 text-foreground hover:text-teal-300 transition-colors duration-300"
                   >
                     <BsLinkedin />
                     <span className="text-base sm:text-lg">in/jeffreywharris</span>
@@ -495,7 +477,7 @@ export default function Home() {
               <div className="text-sm text-muted-foreground">© 2025 Jeff Harris. All rights reserved.</div>
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <button
                 onClick={toggleTheme}
                 className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
@@ -521,7 +503,7 @@ export default function Home() {
                   </svg>
                 )}
               </button>
-            </div>
+            </div> */}
           </div>
         </footer>
       </main>
