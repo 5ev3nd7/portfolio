@@ -13,6 +13,7 @@ import { MobileMenu } from "@/components/MobileMenu";
 import ProjectCards from "@/components/ProjectCards";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
 import { ChevronDown, Code2Icon, WrenchIcon } from "lucide-react"
+import { AnimatedGlowingEffect } from "@/components/AnimatedGlowingEffect";
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
@@ -104,7 +105,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground relative">
 
       <div
-        className={`fixed bottom-10 left-1/2 -translate-x-1/2 animate-bounce duration-700 ease-in ${
+        className={`fixed bottom-16 left-1/2 -translate-x-1/2 animate-bounce duration-700 ease-in ${
           scrollDownBounce ? "block" : "hidden"
         }`}
       >
@@ -230,8 +231,15 @@ export default function Home() {
               I've managed and collaborated with cross-functional teams to build web applications using JavaScript, TypeScript, and modern frameworks like Next.js, with a focus on usability and performance. Driven by curiosity and customer-focus, I'm always exploring new technologies and best practices to deliver solutions that improve engagement and outcomes.
             </p>
             <div className="grid gap-6 sm:gap-8 xl:grid-cols-2">
-              <div className="flex overflow-hidden z-1 rounded-lg animate-gradient__rotate relative group opacity-0 animate-fade-in bg-background">
-                <Card className="p-6 bg-white/10 border-none w-full">
+              <div className="relative rounded-xl">
+                <AnimatedGlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.01}
+                />
+                <Card className="p-6 bg-white/10 border-none h-full">
                   <CardHeader>
                     <CardTitle>
                       <h1 className="text-3xl flex items-center gap-3"><Code2Icon /> Solutions</h1>
@@ -256,8 +264,15 @@ export default function Home() {
                 <i></i>
               </div>
 
-              <div className="flex overflow-hidden z-1 rounded-lg animate-gradient__rotate relative group opacity-0 animate-fade-in">
-                <Card className="p-6 bg-white/10 border-none w-full">
+              <div className="relative rounded-xl">
+                <AnimatedGlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.01}
+                />
+                <Card className="p-6 bg-white/10 border-none h-full">
                   <CardHeader>
                     <CardTitle>
                       <h1 className="text-3xl flex items-center gap-3"><WrenchIcon /> Tools</h1>
@@ -299,7 +314,7 @@ export default function Home() {
         >
           <div className="space-y-12 lg:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">Experience</h2>
+              <h2 className="text-3xl sm:text-4xl font-light mb-6">Experience</h2>
             </div>
             <ol className="space-y-8 sm:space-y-12 group/list">
               {[
@@ -429,7 +444,7 @@ export default function Home() {
             {/* <Cube3D /> */}
 
             <ProjectCards />
-            
+
           </div>
         </motion.section>
 

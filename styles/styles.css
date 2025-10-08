@@ -145,7 +145,8 @@
     -webkit-mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
-    border-radius: inherit
+    border-radius: inherit;
+    background-clip: padding-box;
 }
 
 .animate-gradient__rotate:hover i:before {
@@ -194,6 +195,7 @@
         transform: translateY(0)
     }
 }
+
 
 /* Zoom effect animation */
 @keyframes zoomGrow {
