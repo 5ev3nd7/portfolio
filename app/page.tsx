@@ -12,13 +12,14 @@ import Image from "next/image";
 import { MobileMenu } from "@/components/MobileMenu";
 import ProjectCards from "@/components/ProjectCards";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
-import { Code2Icon, WrenchIcon } from "lucide-react"
+import { ChevronDown, Code2Icon, WrenchIcon } from "lucide-react"
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const [showHeader, setShowHeader] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [scrollDownBounce, setScrollDownBounce] = useState(true)
   const [introOpacity, setIntroOpacity] = useState(1)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
 
@@ -64,6 +65,7 @@ export default function Home() {
             if (!mediaQuery.matches) {
               setShowHeader(entry.target.id !== "Intro")
               setShowMenu(entry.target.id !== "Intro")
+              setScrollDownBounce(entry.target.id === "Intro")
             }
           }
         })
@@ -100,6 +102,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
+
+      <div
+        className={`fixed bottom-10 left-1/2 -translate-x-1/2 animate-bounce duration-700 ease-in ${
+          scrollDownBounce ? "block" : "hidden"
+        }`}
+      >
+        <div className="w-12 h-12 rounded-full border-2 border-white/25 flex items-center justify-center animate-pulse">
+          <ChevronDown className="w-10 h-10 text-white/50" strokeWidth={1} />
+        </div>
+      </div>
+
       <header
         className={`fixed top-0 left-0 right-0 z-10 bg-background/90 shadow-2xl backdrop-blur-2xl border-b border-border transition-all duration-500 ${
           showHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
@@ -217,7 +230,7 @@ export default function Home() {
               I've managed and collaborated with cross-functional teams to build web applications using JavaScript, TypeScript, and modern frameworks like Next.js, with a focus on usability and performance. Driven by curiosity and customer-focus, I'm always exploring new technologies and best practices to deliver solutions that improve engagement and outcomes.
             </p>
             <div className="grid gap-6 sm:gap-8 xl:grid-cols-2">
-              <div className="flex overflow-hidden z-1 rounded-lg animate-gradient__rotate relative group opacity-0 animate-fade-in">
+              <div className="flex overflow-hidden z-1 rounded-lg animate-gradient__rotate relative group opacity-0 animate-fade-in bg-background">
                 <Card className="p-6 bg-white/10 border-none w-full">
                   <CardHeader>
                     <CardTitle>
