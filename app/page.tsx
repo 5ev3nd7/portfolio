@@ -66,8 +66,8 @@ export default function Home() {
             if (!mediaQuery.matches) {
               setShowHeader(entry.target.id !== "Intro")
               setShowMenu(entry.target.id !== "Intro")
-              setScrollDownBounce(entry.target.id === "Intro")
             }
+            setScrollDownBounce(entry.target.id === "Intro")
           }
         })
       },
@@ -103,17 +103,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
-
-      <div
-        className={`fixed bottom-16 left-1/2 -translate-x-1/2 animate-bounce duration-700 ease-in ${
-          scrollDownBounce ? "block" : "hidden"
-        }`}
-      >
-        <div className="w-12 h-12 rounded-full border-2 border-white/25 flex items-center justify-center animate-pulse">
-          <ChevronDown className="w-10 h-10 text-white/50" strokeWidth={1} />
-        </div>
-      </div>
-
       <header
         className={`fixed top-0 left-0 right-0 z-10 bg-background/90 shadow-2xl backdrop-blur-2xl border-b border-border transition-all duration-500 ${
           showHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
@@ -184,6 +173,18 @@ export default function Home() {
             className="fixed flex flex-col lg:flex-row gap-12 sm:gap-16 items-center max-w-4xl mx-auto"
             style={{ opacity: introOpacity }}
           >
+
+            {/* Scroll down bounce - fade with bg */}
+            <div
+              className={`fixed bottom-16 left-1/2 -translate-x-1/2 animate-bounce duration-700 ease-in ${
+                scrollDownBounce ? "block" : "hidden"
+              }`}
+            >
+              <div className="w-12 h-12 rounded-full border-2 border-white/25 flex items-center justify-center animate-pulse">
+                <ChevronDown className="w-10 h-10 text-white/50" strokeWidth={1} />
+              </div>
+            </div>
+
             <div className="space-y-6 sm:space-y-8">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                 Jeff
@@ -192,10 +193,7 @@ export default function Home() {
               </h1>
               <div className="space-y-6 max-w-md">
                 <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                  Frontend Developer crafting digital experiences at the intersection of
-                  <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
-                  and
-                  <span className="text-foreground"> user experience</span>.
+                  Frontend Developer bridging <span className="text-foreground"> design</span> and <span className="text-foreground">development</span> to deliver efficient, <span className="text-foreground">user-focused</span> digital experiences.
                 </p>
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
@@ -342,7 +340,7 @@ export default function Home() {
                   role: "Senior Web Designer/Developer",
                   company: "Webster Bank",
                   description:
-                    "Directed front-end development for public and private websites and led cross-team delivery of a mobile app that drove higher engagement and significantly improved app store ratings. Introduced Drupal as the enterprise CMS, streamlining workflows and embedding agile practices across teams.",
+                    "Directed front-end development for public and private websites and led cross-team delivery of a mobile app that drove higher engagement and significantly improved app store ratings. Evaluated, designed, and implemented Drupal as the enterprise CMS, streamlining workflows and embedding agile practices across teams.",
                   tech: ["Next.js", "Payload CMS", "Vercel", "Design Systems"],
                   url: "https://websterbank.com",
                   design: "https://www.figma.com/design/BW0IOwrjaZILF8VS97KEsr/Webster-Bank---MXmobile?node-id=5426-108212&p=f",
@@ -377,7 +375,7 @@ export default function Home() {
                         </h3>
                         <div className="text-muted-foreground relative group-hover:text-foreground transition-colors duration-500">{job.company}</div>
 
-                        <p className="text-sm text-muted-foreground/70 leading-relaxed mt-3 pb-1 relative group-hover:text-foreground/70 lg:group-hover:text-muted-foreground transition-colors duration-500">
+                        <p className="text-muted-foreground/70 leading-relaxed mt-3 pb-1 relative group-hover:text-foreground/70 lg:group-hover:text-muted-foreground transition-colors duration-500">
                           {job.description}
                         </p>
 
